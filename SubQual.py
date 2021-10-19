@@ -90,33 +90,40 @@ def printReport(jsonFile):
 #https://stats.stackexchange.com/questions/281162/scale-a-number-between-a-range
 def createJsons(jsonFile):
     print("===== Summary Report to File =====")
-    with open("summary_data.json", "w") as summary:
-        json.dump(jsonFile, summary, indent=4)
+    if jsonFile is None:
+        print("NO file has been submitted")
+        return None
+    else:
+        with open("summary_data.json", "w") as summary:
+            json.dump(jsonFile, summary, indent=4)
 
-    newFile = []
-    for i in jsonFile:
-        total = 0
-        gradeDict = []
-        comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F", "Subject G",
-                      "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N", "Subject O"]
-        for k in i.keys():
-            if k in comparison:
-                gradeDict.append(i[k])
-        for j in gradeDict:
-            total = total + j
-        average = total / len(gradeDict)
-        #average = average * 4 #to scale from range 1-5 upto 1-20
-        average = np.multiply(average, 4)
-        # average = int(round(six))
+        newFile = []
+        for i in jsonFile:
+            total = 0
+            gradeDict = []
+            comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F", "Subject G",
+                          "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N", "Subject O"]
+            for k in i.keys():
+                if k in comparison:
+                    gradeDict.append(i[k])
+            for j in gradeDict:
+                total = total + j
+            average = total / len(gradeDict)
+            #average = average * 4 #to scale from range 1-5 upto 1-20
+            #average = np.multiply(average, 4)
+            l1 = [1, 5] #current range
+            l2 = [1, 20] #new range
+            average = np.interp(average, l1, l2)
+            average = float(round(average, 2))
 
-        newDict = {}
-        newDict["Test Number"] = i["Test Number"]
-        newDict["Average"] = average
-        newFile.append(newDict)
+            newDict = {}
+            newDict["Test Number"] = i["Test Number"]
+            newDict["Average"] = average
+            newFile.append(newDict)
 
-    with open("scaled_data.json", "w") as scaled:
-        json.dump(newFile, scaled, indent=4)
-    print("Summary printed")
+        with open("scaled_data.json", "w") as scaled:
+            json.dump(newFile, scaled, indent=4)
+        print("Summary printed")
 
 
 # Option4: Display data for a specific test number
