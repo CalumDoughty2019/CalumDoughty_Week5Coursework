@@ -67,21 +67,36 @@ def printReport(jsonFile):
         #print(jsonFile.shape())
 
         for i in jsonFile:
-            average = (i["Subject A"] + i["Subject B"] + i["Subject C"] + i["Subject D"] + i["Subject E"] + i["Subject F"] + i["Subject G"] + i["Subject H"] + i["Subject I"] + i["Subject J"] + i["Subject K"] + i["Subject L"] + i["Subject N"] + i["Subject O"])/14
+            subjects = []
+            for thisLine in i:
+                if not thisLine.find("Subject"):
+                    subjects.append(i.get(thisLine))
+            #print(subjects)
+
+            average = 0
+            for entry in subjects:
+                #average = average + entry[subjects]
+                average = average + entry
+            average = average/len(subjects)
             average = int(round(average))
-
-            #make a new dictionary with just the grades so that we can find minimum and maximum values
-            gradeDict = []
-            comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F", "Subject G", "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N", "Subject O"]
-            for k in i.keys():
-                if k in comparison:
-                    gradeDict.append(i[k])
-            minElement = numpy.amin(gradeDict)
-            maxElement = numpy.amax(gradeDict)
-            #print(sameDict)
-
-
+            minElement = numpy.amin(subjects)
+            maxElement = numpy.amax(subjects)
             print("\t" + str(i["Test Number"]) + "\t\t\t" + str(i["Video Clip ID"]) + "\t\t\t" + str(i["Bandwidth Constraint"]) + "\t\t\t\t\t" + str(average) + "\t\t\t" + str(minElement) + "\t\t\t" + str(maxElement))
+
+        # for i in jsonFile:
+        #     average = (i["Subject A"] + i["Subject B"] + i["Subject C"] + i["Subject D"] + i["Subject E"] + i["Subject F"] + i["Subject G"] + i["Subject H"] + i["Subject I"] + i["Subject J"] + i["Subject K"] + i["Subject L"] + i["Subject N"] + i["Subject O"])/14
+        #     average = int(round(average))
+        #
+        #     #make a new dictionary with just the grades so that we can find minimum and maximum values
+        #     gradeDict = []
+        #     comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F", "Subject G", "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N", "Subject O"]
+        #     for k in i.keys():
+        #         if k in comparison:
+        #             gradeDict.append(i[k])
+        #     minElement = numpy.amin(gradeDict)
+        #     maxElement = numpy.amax(gradeDict)
+        #     #print(sameDict)
+        #    print("\t" + str(i["Test Number"]) + "\t\t\t" + str(i["Video Clip ID"]) + "\t\t\t" + str(i["Bandwidth Constraint"]) + "\t\t\t\t\t" + str(average) + "\t\t\t" + str(minElement) + "\t\t\t" + str(maxElement))
             #print(i)
         #return None
 
@@ -98,17 +113,33 @@ def createJsons(jsonFile):
             json.dump(jsonFile, summary, indent=4)
 
         newFile = []
+        # for i in jsonFile:
+        #     total = 0
+        #     gradeDict = []
+        #     comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F", "Subject G",
+        #                   "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N", "Subject O"]
+        #     for k in i.keys():
+        #         if k in comparison:
+        #             gradeDict.append(i[k])
+        #     for j in gradeDict:
+        #         total = total + j
+        #     average = total / len(gradeDict)
+
         for i in jsonFile:
-            total = 0
-            gradeDict = []
-            comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F", "Subject G",
-                          "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N", "Subject O"]
-            for k in i.keys():
-                if k in comparison:
-                    gradeDict.append(i[k])
-            for j in gradeDict:
-                total = total + j
-            average = total / len(gradeDict)
+            subjects = []
+            for thisLine in i:
+                if not thisLine.find("Subject"):
+                    subjects.append(i.get(thisLine))
+            # print(subjects)
+
+            average = 0
+            for entry in subjects:
+                # average = average + entry[subjects]
+                average = average + entry
+            average = average / len(subjects)
+            #average = int(round(average))
+
+
             #average = average * 4 #to scale from range 1-5 upto 1-20
             #average = np.multiply(average, 4)
             l1 = [1, 5] #current range
@@ -123,7 +154,7 @@ def createJsons(jsonFile):
 
         with open("scaled_data.json", "w") as scaled:
             json.dump(newFile, scaled, indent=4)
-        print("Summary printed")
+        print("Summary printing - You may need to close the application/service to view new documents")
 
 
 # Option4: Display data for a specific test number
@@ -144,24 +175,39 @@ def printSingle(jsonFile):
                     if i["Test Number"] == int(id):
                         print("Test No\t\tClip ID\t\tBandwidth Setting\tAvg.Score\tMin Score\tMax Score")
 
-                        average = (i["Subject A"] + i["Subject B"] + i["Subject C"] + i["Subject D"] + i["Subject E"] +
-                                   i[
-                                       "Subject F"] + i["Subject G"] + i["Subject H"] + i["Subject I"] + i[
-                                       "Subject J"] + i[
-                                       "Subject K"] + i["Subject L"] + i["Subject N"] + i["Subject O"]) / 14
-                        average = int(round(average))
+                        subjects = []
+                        for thisLine in i:
+                            if not thisLine.find("Subject"):
+                                subjects.append(i.get(thisLine))
+                        # print(subjects)
 
-                        # make a new dictionary with just the grades so that we can find minimum and maximum values
-                        gradeList = []
-                        comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F",
-                                      "Subject G", "Subject H", "Subject I", "Subject J", "Subject K", "Subject L",
-                                      "Subject N", "Subject O"]
-                        for k in i.keys():
-                            if k in comparison:
-                                gradeList.append(i[k])
-                        minElement = numpy.amin(gradeList)
-                        maxElement = numpy.amax(gradeList)
-                        # print(sameDict)
+                        average = 0
+                        for entry in subjects:
+                            # average = average + entry[subjects]
+                            average = average + entry
+                        average = average / len(subjects)
+                        average = int(round(average))
+                        minElement = numpy.amin(subjects)
+                        maxElement = numpy.amax(subjects)
+
+                        # average = (i["Subject A"] + i["Subject B"] + i["Subject C"] + i["Subject D"] + i["Subject E"] +
+                        #            i[
+                        #                "Subject F"] + i["Subject G"] + i["Subject H"] + i["Subject I"] + i[
+                        #                "Subject J"] + i[
+                        #                "Subject K"] + i["Subject L"] + i["Subject N"] + i["Subject O"]) / 14
+                        # average = int(round(average))
+                        #
+                        # # make a new dictionary with just the grades so that we can find minimum and maximum values
+                        # gradeList = []
+                        # comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F",
+                        #               "Subject G", "Subject H", "Subject I", "Subject J", "Subject K", "Subject L",
+                        #               "Subject N", "Subject O"]
+                        # for k in i.keys():
+                        #     if k in comparison:
+                        #         gradeList.append(i[k])
+                        # minElement = numpy.amin(gradeList)
+                        # maxElement = numpy.amax(gradeList)
+                        # # print(sameDict)
 
                         print("\t" + str(i["Test Number"]) + "\t\t\t" + str(i["Video Clip ID"]) + "\t\t\t" + str(
                             i["Bandwidth Constraint"]) + "\t\t\t\t\t" + str(average) + "\t\t\t" + str(
@@ -213,45 +259,48 @@ def testClip(jsonFile):
                     return None  ##return to main menu
                 for i in jsonFile:
                     if i["Video Clip ID"] == clip:
-                        comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F",
-                                      "Subject G",
-                                      "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N",
-                                      "Subject O"]
+                        # comparison = ["Subject A", "Subject B", "Subject C", "Subject D", "Subject E", "Subject F",
+                        #               "Subject G",
+                        #               "Subject H", "Subject I", "Subject J", "Subject K", "Subject L", "Subject N",
+                        #               "Subject O"]
                         if i["Bandwidth Constraint"] == "MAX":
                             #maxCount += 1
-                            for k in i.keys():
-                                if k in comparison:
-                                    maxList.append(i[k])
+                            # for k in i.keys():
+                            #     if k in comparison:
+                            #         maxList.append(i[k])
+                            for thisLine in i:
+                                if not thisLine.find("Subject"):
+                                    maxList.append(i.get(thisLine))
                             maxMean = sum(maxList) / len(maxList)
                             maxMean = int(round(maxMean))
                         if i["Bandwidth Constraint"] == "AV":
-                            for k in i.keys():
-                                if k in comparison:
-                                    avList.append(i[k])
+                            for thisLine in i:
+                                if not thisLine.find("Subject"):
+                                    avList.append(i.get(thisLine))
                             avMean = sum(avList) / len(avList)
                             avMean = int(round(avMean))
                         if i["Bandwidth Constraint"] == -3:
-                            for k in i.keys():
-                                if k in comparison:
-                                    neg3List.append(i[k])
+                            for thisLine in i:
+                                if not thisLine.find("Subject"):
+                                    neg3List.append(i.get(thisLine))
                             neg3Mean = sum(neg3List) / len(neg3List)
                             neg3Mean = int(round(neg3Mean))
                         if i["Bandwidth Constraint"] == -5:
-                            for k in i.keys():
-                                if k in comparison:
-                                    neg5List.append(i[k])
+                            for thisLine in i:
+                                if not thisLine.find("Subject"):
+                                    neg5List.append(i.get(thisLine))
                             neg5Mean = sum(neg5List) / len(neg5List)
                             neg5Mean = int(round(neg5Mean))
                         if i["Bandwidth Constraint"] == -10:
-                            for k in i.keys():
-                                if k in comparison:
-                                    neg10List.append(i[k])
+                            for thisLine in i:
+                                if not thisLine.find("Subject"):
+                                    neg10List.append(i.get(thisLine))
                             neg10Mean = sum(neg10List) / len(neg10List)
                             neg10Mean = int(round(neg10Mean))
                         if i["Bandwidth Constraint"] == 10:
-                            for k in i.keys():
-                                if k in comparison:
-                                    pos10List.append(i[k])
+                            for thisLine in i:
+                                if not thisLine.find("Subject"):
+                                    pos10List.append(i.get(thisLine))
                             pos10Mean = sum(pos10List) / len(pos10List)
                             pos10Mean = int(round(pos10Mean))
 
