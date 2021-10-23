@@ -53,6 +53,8 @@ def importer():
                 print()
         except IOError:
             print("Could not read file: ", fileName)
+        except FileNotFoundError:
+            print("File does not exist in local file directory")
 
 
 # Option2: Print Data Summary Report
